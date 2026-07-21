@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getMinutes } from '../../utils/reading-time';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const tags = new Set<string>();
+  posts.forEach((p) => p.data.tags.forEach((t) => tags.add(t)));
+
+  return [...tags].map((tag) => {
+    const filtered = posts
+      .filter((p) => p.data.tags.includes(tag))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    return {
+      params: { tag: tag.replace(/\s+/g, '-') },
+      props: { tag, posts: filtered },
+    };
+  });
+}
+
+const { tag, posts } = Astro.props;
+---
+<BaseLayout title={`${tag} — Nhung Luong`} description={`Posts tagged ${tag}.`}>
+  <section class="intro">
+    <h1>{tag}</h1>
+    <p>{posts.length} post{posts.length === 1 ? '' : 's'} tagged &ldquo;{tag}&rdquo;.</p>
+  </section>
+  <div class="post-list">
+    {posts.map((post) => (
+      <PostCard
+        slug={post.id}
+        title={post.data.title}
+        description={post.data.description}
+        tags={post.data.tags}
+        minutes={getMinutes(post.body)}
+      />
+    ))}
+  </div>
+  <p style="margin-top:2rem;"><a href="/tags">&larr; All tags</a></p>
+</BaseLayout>

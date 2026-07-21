@@ -1,0 +1,18 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  minutes: number;
+}
+const { slug, title, description, tags, minutes } = Astro.props;
+---
+<a href={`/blog/${slug}`} class="post-card">
+  <h2>{title}</h2>
+  <p class="excerpt">{description}</p>
+  <div class="post-meta">
+    {tags.map((t) => <span class="tag">{t}</span>)}
+    <span class="reading-time">{minutes} min read</span>
+  </div>
+</a>

@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getMinutes } from '../../utils/reading-time';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const minutes = getMinutes(post.body);
+const dateStr = post.data.pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
+  <article class="article">
+    <header class="article-header">
+      <p class="kicker">
+        {post.data.tags.join(' · ')} &middot; {dateStr} &middot; {minutes} min read
+      </p>
+      <h1>{post.data.title}</h1>
+    </header>
+    <div class="article-body">
+      <Content />
+    </div>
+    <p style="margin-top:2.5rem;"><a href="/">&larr; Back to all posts</a></p>
+  </article>
+</BaseLayout>
