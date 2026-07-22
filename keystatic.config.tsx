@@ -5,7 +5,7 @@ export default config({
   // To edit the LIVE site through /keystatic, switch this to the GitHub storage
   // block shown in README.md (Step 6) after you connect the GitHub app.
   storage: {
-    kind: 'local',
+    kind: 'github', repo: 'nhungluong1989/nhung-blog'
   },
   ui: {
     brand: { name: 'Nhung Luong' },
