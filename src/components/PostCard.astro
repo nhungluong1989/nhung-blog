@@ -8,7 +8,11 @@ interface Props {
 }
 const { slug, title, description, tags, minutes } = Astro.props;
 ---
-<a href={`/blog/${slug}`} class="post-card">
+<a
+  href={`/blog/${slug}`}
+  class="post-card"
+  data-search={`${title} ${description} ${tags.join(' ')}`.toLowerCase()}
+>
   <h2>{title}</h2>
   <p class="excerpt">{description}</p>
   <div class="post-meta">

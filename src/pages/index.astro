@@ -19,8 +19,18 @@ const posts = (await getCollection('blog')).sort(
     </p>
   </section>
 
+  <div class="search-row">
+    <input
+      type="search"
+      id="search-input"
+      class="search-box"
+      placeholder="Search posts…"
+      aria-label="Search posts"
+    />
+  </div>
+
   <p class="section-label">Recent posts</p>
-  <div class="post-list">
+  <div class="post-list" id="post-list">
     {posts.map((post) => (
       <PostCard
         slug={post.id}
@@ -31,4 +41,23 @@ const posts = (await getCollection('blog')).sort(
       />
     ))}
   </div>
+  <p class="no-results" id="no-results" hidden>No posts match your search.</p>
+
+  <script>
+    const input = document.getElementById('search-input') as HTMLInputElement;
+    const list = document.getElementById('post-list');
+    const noResults = document.getElementById('no-results');
+    const cards = Array.from(list?.querySelectorAll<HTMLElement>('.post-card') ?? []);
+
+    input?.addEventListener('input', () => {
+      const query = input.value.trim().toLowerCase();
+      let visibleCount = 0;
+      for (const card of cards) {
+        const matches = !query || (card.dataset.search ?? '').includes(query);
+        card.hidden = !matches;
+        if (matches) visibleCount++;
+      }
+      if (noResults) noResults.hidden = visibleCount !== 0;
+    });
+  </script>
 </BaseLayout>
