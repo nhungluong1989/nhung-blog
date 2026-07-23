@@ -53,6 +53,9 @@ export default config({
         content: fields.mdx({
           label: 'Body',
           description: 'Write your post here. Fenced code blocks get syntax highlighting.',
+          // Store posts as plain Markdown (.md) instead of MDX (.mdx) so that
+          // characters like { and < in your writing are treated as text, not code.
+          extension: 'md',
         }),
       },
     }),
