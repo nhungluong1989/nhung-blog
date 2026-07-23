@@ -10,16 +10,93 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h1>About</h1>
     </header>
     <div class="article-body">
+      <img
+        src="/images/nhung.jpeg"
+        alt="Nhung Luong"
+        class="about-photo"
+        width="1024"
+        height="768"
+      />
       <p>
-        Hi, I'm Nhung Luong. I work on data engineering, AI engineering, and
-        data products. This blog is where I write about the things I build and
-        the lessons I pick up along the way — from pipelines and models to the
-        practical work of turning data into products people actually use.
+        I'm a Senior Engineering Manager at Techcombank in Hanoi, where I lead
+        a Data & AI engineering team. My work covers the pipelines that move data,
+        the knowledge bases that give it structure and context, the models and AI
+        agents built on top of it, and the products that deliver all of this to
+        business users.
+      </p>
+      <h2>Career journey</h2>
+      <p>
+        My path into data wasn't a straight line. Six years in accounting and finance
+        at Japanese companies like Honda and Panasonic taught me how businesses actually
+        use numbers — a perspective I still rely on today, leading teams that build
+        large-scale data platforms on AWS and Databricks at Techcombank.
       </p>
       <p>
-        Edit this page's text in <code>src/pages/about.astro</code>, or add your
-        links, photo, and background here.
+        <strong>Auditor — VACO Auditing Company Limited</strong><br />
+        Performed statutory and financial statement audits for corporate clients,
+        testing controls, verifying balances, and preparing audit documentation to
+        Vietnamese and international standards.
       </p>
+      <p>
+        <strong>Accountant — Honda, Panasonic</strong><br />
+        Handled general accounting, month-end close, reconciliations, and management
+        reporting for the finance function of large Japanese manufacturers, working
+        closely with business units on cost and performance analysis.
+      </p>
+      <p>
+        <strong>Lead Data Analyst cum Data Engineer — Honda</strong><br />
+        Bridged finance and engineering: built reporting and analytics for business
+        stakeholders while developing the data pipelines and models behind them. This
+        was the transition point from finance into data.
+      </p>
+      <p>
+        <strong>Senior Data Engineer → Senior Cloud Engineer → Engineering Manager →
+        Senior Engineering Manager — Techcombank</strong><br />
+        Progressed from designing and building large-scale data pipelines, to
+        architecting cloud data infrastructure on AWS and Databricks, to leading
+        engineering teams delivering data platforms, knowledge bases, AI agents, and
+        data products for business users across the bank.
+      </p>
+      <h2>Key achievements</h2>
+      <ul>
+        <li>
+          Scaled the data and AI engineering team from 4 to 32 people, growing
+          hiring, onboarding, and delivery structures alongside the headcount.
+        </li>
+        <li>
+          Built the data lake on a medallion architecture, organizing data
+          across bronze, silver, and gold layers to keep raw ingestion,
+          cleansing, and business-ready datasets cleanly separated.
+        </li>
+        <li>
+          Developed a Databricks-based framework for ingesting, transforming,
+          and serving data between the data lake and the bank's surrounding
+          systems.
+        </li>
+        <li>
+          Designed and delivered the migration from AWS Glue to Databricks,
+          moving both data and pipelines onto a single platform.
+        </li>
+        <li>
+          Led the migration from the legacy data warehouse to the data lake,
+          enabling the warehouse to be decommissioned.
+        </li>
+        <li>
+          Introduced AI across the software development lifecycle — from
+          requirements analysis and data discovery through implementation,
+          testing, and deployment — to shorten delivery cycles.
+        </li>
+        <li>
+          Built an internal wiki platform that lets teams create, publish,
+          manage, and share their own knowledge bases — with an MCP server on
+          top so AI agents can consume the same content programmatically.
+        </li>
+      </ul>
+      <h2>Education</h2>
+      <ul>
+        <li>MSc in Banking and Finance — Sheffield Hallam University, United Kingdom</li>
+        <li>Bachelor's Degree in Accounting and Auditing — National Economics University, Hanoi, Vietnam</li>
+      </ul>
       <h2>Find me</h2>
       <ul>
         <li><a href="https://github.com/nhungluong1989/">GitHub</a></li>

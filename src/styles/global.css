@@ -121,6 +121,13 @@ a.tag:hover { text-decoration: none; background: #24380f; }
 .article-header h1 { margin: 0 0 0.75rem; }
 .article-body { font-size: 1.02rem; }
 .article-body img { max-width: 100%; border-radius: 8px; }
+.article-body img.about-photo {
+  width: 360px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
 .article-body :where(h2, h3) { scroll-margin-top: 1rem; }
 .article-body blockquote {
   border-left: 3px solid var(--accent-strong);
