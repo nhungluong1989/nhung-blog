@@ -7,8 +7,9 @@ interface Props {
   title: string;
   description: string;
   ogType?: string;
+  wide?: boolean;
 }
-const { title, description, ogType } = Astro.props;
+const { title, description, ogType, wide = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -16,11 +17,11 @@ const { title, description, ogType } = Astro.props;
     <BaseHead title={title} description={description} ogType={ogType} />
   </head>
   <body>
-    <Header />
-    <main class="wrap">
+    <Header wide={wide} />
+    <main class={wide ? 'wrap wrap-wide' : 'wrap'}>
       <slot />
     </main>
-    <Footer />
+    <Footer wide={wide} />
 
     <script>
       import mermaid from 'mermaid';
@@ -31,14 +32,14 @@ const { title, description, ogType } = Astro.props;
           startOnLoad: false,
           theme: 'base',
           themeVariables: {
-            background: '#121812',
-            primaryColor: '#1c2a12',
-            primaryTextColor: '#eef2ea',
-            primaryBorderColor: '#639922',
-            lineColor: '#9aa693',
-            secondaryColor: '#141a13',
-            tertiaryColor: '#0a0e0a',
-            fontFamily: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+            background: '#12161c',
+            primaryColor: '#1b1f26',
+            primaryTextColor: '#eceff2',
+            primaryBorderColor: '#00ac76',
+            lineColor: '#9399a1',
+            secondaryColor: '#1b1f26',
+            tertiaryColor: '#05070c',
+            fontFamily: '"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
           },
         });
         mermaid.run({ nodes: diagrams }).then(() => {

@@ -1,12 +1,15 @@
 ---
+interface Props {
+  wide?: boolean;
+}
+const { wide = false } = Astro.props;
 ---
 <header class="site-header">
-  <div class="wrap">
+  <div class={wide ? 'wrap wrap-wide wrap-offset' : 'wrap'}>
     <a href="/" class="brand">Nhung Luong</a>
     <nav class="nav">
       <a href="/">Blog</a>
       <a href="/about">About</a>
-      <a href="/tags">Tags</a>
     </nav>
   </div>
 </header>

@@ -1,11 +1,15 @@
 ---
+interface Props {
+  wide?: boolean;
+}
+const { wide = false } = Astro.props;
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
-  <div class="wrap">
-    <span>&copy; {year} Nhung Luong</span>
+  <div class={wide ? 'wrap wrap-wide wrap-offset' : 'wrap'}>
+    <span class="footer-prompt">nhungluong@blog:~$ <span class="cursor">_</span></span>
     <span>
-      <a href="/rss.xml">RSS</a> &middot; Built with Astro
+      &copy; {year} Nhung Luong &middot; <a href="/rss.xml">RSS</a> &middot; Built with Astro
     </span>
   </div>
 </footer>

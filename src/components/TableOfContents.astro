@@ -1,0 +1,64 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+interface Props {
+  headings: Heading[];
+}
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{items.length > 0 && (
+  <details class="toc" open>
+    <summary class="toc-summary">
+      <span class="toc-icon" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="9" y1="6" x2="21" y2="6"></line>
+          <line x1="9" y1="12" x2="21" y2="12"></line>
+          <line x1="9" y1="18" x2="21" y2="18"></line>
+          <circle cx="4" cy="6" r="1"></circle>
+          <circle cx="4" cy="12" r="1"></circle>
+          <circle cx="4" cy="18" r="1"></circle>
+        </svg>
+      </span>
+      <span class="toc-label">Table of contents</span>
+      <span class="toc-toggle" aria-hidden="true">&#9650;</span>
+    </summary>
+    <ul class="toc-list">
+      {items.map((h) => (
+        <li class={`toc-item toc-depth-${h.depth}`}>
+          <a href={`#${h.slug}`} data-toc-link data-target={h.slug}>{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </details>
+)}
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+  if (links.length) {
+    const targets = Array.from(links)
+      .map((link) => {
+        const slug = link.dataset.target;
+        const el = slug ? document.getElementById(slug) : null;
+        return el ? { link, el } : null;
+      })
+      .filter((t): t is { link: HTMLAnchorElement; el: HTMLElement } => t !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const match = targets.find((t) => t.el === entry.target);
+          if (!match) return;
+          links.forEach((l) => l.classList.remove('active'));
+          match.link.classList.add('active');
+        });
+      },
+      { rootMargin: '0px 0px -70% 0px', threshold: 0 },
+    );
+    targets.forEach((t) => observer.observe(t.el));
+  }
+</script>

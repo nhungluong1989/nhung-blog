@@ -4,19 +4,25 @@ interface Props {
   title: string;
   description: string;
   tags: string[];
+  pubDate: Date;
   minutes: number;
 }
-const { slug, title, description, tags, minutes } = Astro.props;
+const { slug, title, description, tags, pubDate, minutes } = Astro.props;
+const dateStr = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
 ---
-<a
-  href={`/blog/${slug}`}
+<div
   class="post-card"
   data-search={`${title} ${description} ${tags.join(' ')}`.toLowerCase()}
+  data-tags={tags.map((t) => t.replace(/\s+/g, '-')).join(' ')}
 >
-  <h2>{title}</h2>
+  <p class="post-date">{dateStr} &middot; {minutes} min read</p>
+  <h2><a href={`/blog/${slug}`} class="post-title-link">{title}</a></h2>
   <p class="excerpt">{description}</p>
   <div class="post-meta">
-    {tags.map((t) => <span class="tag">{t}</span>)}
-    <span class="reading-time">{minutes} min read</span>
+    {tags.map((t) => <button type="button" class="tag">#{t.replace(/\s+/g, '-')}</button>)}
   </div>
-</a>
+</div>

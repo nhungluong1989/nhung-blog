@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 import { getMinutes } from '../../utils/reading-time';
 
 export async function getStaticPaths() {
@@ -12,25 +13,35 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const minutes = getMinutes(post.body);
 const dateStr = post.data.pubDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'short',
   day: 'numeric',
 });
+const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
 ---
-<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
-  <article class="article">
-    <header class="article-header">
-      <p class="kicker">
-        {post.data.tags.join(' · ')} &middot; {dateStr} &middot; {minutes} min read
-      </p>
-      <h1>{post.data.title}</h1>
-    </header>
-    <div class="article-body">
-      <Content />
-    </div>
-    <p style="margin-top:2.5rem;"><a href="/">&larr; Back to all posts</a></p>
-  </article>
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article" wide={hasToc}>
+  <div class={hasToc ? 'post-wrap has-toc' : 'post-wrap'}>
+    <article class="article">
+      <header class="article-header">
+        <p class="post-date">{dateStr} &middot; {minutes} min read</p>
+        <h1>{post.data.title}</h1>
+        <div class="post-meta">
+          {post.data.tags.map((t) => <span class="tag">#{t.replace(/\s+/g, '-')}</span>)}
+        </div>
+      </header>
+      <hr class="divider" />
+      <div class="article-body">
+        <Content />
+      </div>
+      <p style="margin-top:2.5rem;"><a href="/">&larr; Back to all posts</a></p>
+    </article>
+    {hasToc && (
+      <aside class="toc-sidebar">
+        <TableOfContents headings={headings} />
+      </aside>
+    )}
+  </div>
 </BaseLayout>
