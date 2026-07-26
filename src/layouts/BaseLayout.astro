@@ -23,6 +23,115 @@ const { title, description, ogType } = Astro.props;
     <Footer />
 
     <script>
+      import mermaid from 'mermaid';
+
+      const diagrams = document.querySelectorAll('.mermaid');
+      if (diagrams.length) {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'base',
+          themeVariables: {
+            background: '#121812',
+            primaryColor: '#1c2a12',
+            primaryTextColor: '#eef2ea',
+            primaryBorderColor: '#639922',
+            lineColor: '#9aa693',
+            secondaryColor: '#141a13',
+            tertiaryColor: '#0a0e0a',
+            fontFamily: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+          },
+        });
+        mermaid.run({ nodes: diagrams }).then(() => {
+          diagrams.forEach((container) => {
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            const MIN = 0.5;
+            const MAX = 3;
+            const STEP = 0.2;
+            let scale = 1;
+
+            svg.style.transformOrigin = '0 0';
+            svg.style.transition = 'transform 0.15s ease';
+            svg.style.cursor = 'grab';
+
+            const applyScale = () => {
+              svg.style.transform = `scale(${scale})`;
+            };
+
+            const makeButton = (label, ariaLabel, onClick) => {
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.textContent = label;
+              btn.setAttribute('aria-label', ariaLabel);
+              btn.addEventListener('click', onClick);
+              return btn;
+            };
+
+            const controls = document.createElement('div');
+            controls.className = 'mermaid-zoom-controls';
+            controls.append(
+              makeButton('−', 'Zoom out', () => {
+                scale = Math.max(MIN, +(scale - STEP).toFixed(2));
+                applyScale();
+              }),
+              makeButton('reset', 'Reset zoom', () => {
+                scale = 1;
+                applyScale();
+                container.scrollLeft = 0;
+                container.scrollTop = 0;
+              }),
+              makeButton('+', 'Zoom in', () => {
+                scale = Math.min(MAX, +(scale + STEP).toFixed(2));
+                applyScale();
+              }),
+            );
+            controls.children[1].classList.add('mermaid-zoom-reset');
+            container.appendChild(controls);
+
+            container.addEventListener(
+              'wheel',
+              (e) => {
+                if (!e.ctrlKey && !e.metaKey) return;
+                e.preventDefault();
+                scale =
+                  e.deltaY < 0
+                    ? Math.min(MAX, +(scale + STEP).toFixed(2))
+                    : Math.max(MIN, +(scale - STEP).toFixed(2));
+                applyScale();
+              },
+              { passive: false },
+            );
+
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let startScrollLeft = 0;
+            let startScrollTop = 0;
+
+            container.addEventListener('mousedown', (e) => {
+              isDragging = true;
+              svg.style.cursor = 'grabbing';
+              startX = e.pageX;
+              startY = e.pageY;
+              startScrollLeft = container.scrollLeft;
+              startScrollTop = container.scrollTop;
+            });
+            window.addEventListener('mouseup', () => {
+              isDragging = false;
+              svg.style.cursor = 'grab';
+            });
+            window.addEventListener('mousemove', (e) => {
+              if (!isDragging) return;
+              container.scrollLeft = startScrollLeft - (e.pageX - startX);
+              container.scrollTop = startScrollTop - (e.pageY - startY);
+            });
+          });
+        });
+      }
+    </script>
+
+    <script>
       // Add a "copy" button to every fenced code block.
       document.querySelectorAll('.article-body pre').forEach((pre) => {
         const btn = document.createElement('button');

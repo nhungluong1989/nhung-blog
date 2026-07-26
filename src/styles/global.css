@@ -197,6 +197,76 @@ a.tag:hover { text-decoration: none; background: #24380f; }
 .copy-btn:hover { color: var(--accent); border-color: var(--accent-strong); }
 .copy-btn.copied { color: var(--accent); }
 
+/* Tables */
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.92rem;
+  overflow-x: auto;
+  display: block;
+}
+.article-body th,
+.article-body td {
+  border: 0.5px solid var(--border);
+  padding: 0.55rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+.article-body th {
+  background: var(--bg-card);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Mermaid diagrams */
+.article-body .mermaid {
+  position: relative;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin: 1.8rem 0;
+  max-height: 520px;
+  overflow: auto;
+  text-align: center;
+}
+.article-body .mermaid svg { max-width: 100%; }
+
+.mermaid-zoom-controls {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  gap: 0.3rem;
+}
+.mermaid-zoom-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: var(--bg-code-header);
+  color: var(--text-dim);
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.mermaid-zoom-controls button.mermaid-zoom-reset {
+  width: auto;
+  padding: 0 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+}
+.mermaid-zoom-controls button:hover {
+  color: var(--accent);
+  border-color: var(--accent-strong);
+}
+
 /* Tags index */
 .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.6rem; padding-top: 1rem; }
 .tag-cloud .tag { font-size: 0.9rem; padding: 0.35rem 0.8rem; }
