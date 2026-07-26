@@ -1,0 +1,18 @@
+---
+const snippets = ['01001', 'SELECT', '0x2a', '{ }', 'λ', '1101', 'NULL', '->', 'JOIN', 'df[', 'async', '0110'];
+---
+<div class="hero-bg" aria-hidden="true">
+  <div class="hero-grid"></div>
+  <div class="hero-glow hero-glow-a"></div>
+  <div class="hero-glow hero-glow-b"></div>
+  <div class="hero-fall-layer">
+    {snippets.map((text, i) => (
+      <span
+        class="hero-fall-item"
+        style={`left:${(i + 0.5) * (100 / snippets.length)}%; animation-duration:${11 + (i % 4) * 3}s; animation-delay:${i * 1.4}s;`}
+      >{text}</span>
+    ))}
+  </div>
+  <div class="hero-scan"></div>
+  <div class="hero-mask"></div>
+</div>

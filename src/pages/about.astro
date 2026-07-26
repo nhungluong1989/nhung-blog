@@ -1,29 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import NeuralBackground from '../components/NeuralBackground.astro';
 ---
 <BaseLayout
   title="About — Nhung Luong"
   description="About Nhung Luong, a data and AI engineer writing about pipelines, models, and data products."
 >
   <article class="article">
-    <header class="article-header">
-      <h1>About</h1>
-    </header>
+    <div class="about-hero">
+      <NeuralBackground id="about-canvas" />
+      <header class="article-header">
+        <h1>About</h1>
+      </header>
+      <div class="article-body">
+        <img
+          src="/images/nhung.jpeg"
+          alt="Nhung Luong"
+          class="about-photo"
+          width="1024"
+          height="768"
+        />
+        <p>
+          I'm a Senior Engineering Manager at Techcombank in Hanoi, where I lead
+          a Data & AI engineering team. My work covers the pipelines that move data,
+          the knowledge bases that give it structure and context, the models and AI
+          agents built on top of it, and the products that deliver all of this to
+          business users.
+        </p>
+      </div>
+    </div>
     <div class="article-body">
-      <img
-        src="/images/nhung.jpeg"
-        alt="Nhung Luong"
-        class="about-photo"
-        width="1024"
-        height="768"
-      />
-      <p>
-        I'm a Senior Engineering Manager at Techcombank in Hanoi, where I lead
-        a Data & AI engineering team. My work covers the pipelines that move data,
-        the knowledge bases that give it structure and context, the models and AI
-        agents built on top of it, and the products that deliver all of this to
-        business users.
-      </p>
       <h2>Career journey</h2>
       <p>
         My path into data wasn't a straight line. Six years in accounting and finance

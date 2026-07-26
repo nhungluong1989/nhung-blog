@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import HeroBackground from '../components/HeroBackground.astro';
 import { getMinutes } from '../utils/reading-time';
 
 const posts = (await getCollection('blog')).sort(
@@ -21,6 +22,7 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
   description="Notes on data engineering, AI engineering, and building data products — pipelines, models, and the messy bits in between."
 >
   <section class="intro">
+    <HeroBackground />
     <h1>Notes on data engineering, AI engineering, and building data products.</h1>
     <p class="intro-desc">
       Pipelines, models, and the messy bits in between — notes on building data

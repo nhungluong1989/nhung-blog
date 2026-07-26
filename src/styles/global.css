@@ -118,9 +118,99 @@ p, li { color: var(--text-muted); }
 .footer-prompt { color: var(--text-dim); }
 
 /* Intro / hero */
-.intro { padding: 2.5rem 0 0; }
-.intro h1 { margin: 0 0 0.75rem; font-size: 2.25rem; }
-.intro-desc { font-size: 0.9375rem; color: var(--text-muted); max-width: 90%; }
+.intro { position: relative; padding: 2.5rem 0 0; overflow: hidden; }
+/* Hero background: drifting grid + aurora glow + falling code + scan line */
+.hero-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
+.neural-canvas { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(65, 235, 176, 0.16) 1px, transparent 1px),
+    linear-gradient(rgba(65, 235, 176, 0.16) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  animation: hero-grid-drift 12s linear infinite;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 288px;
+  height: 288px;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: hero-glow-float 16s ease-in-out infinite;
+}
+.hero-glow-a {
+  left: -96px;
+  top: -96px;
+  background: radial-gradient(circle, rgba(65, 235, 176, 0.42), transparent 70%);
+}
+.hero-glow-b {
+  right: -64px;
+  top: 40px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(9, 183, 220, 0.38), transparent 70%);
+  animation-duration: 21s;
+}
+
+.hero-fall-layer { position: absolute; inset: 0; }
+.hero-fall-item {
+  position: absolute;
+  top: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(65, 235, 176, 0.4);
+  white-space: nowrap;
+  animation-name: hero-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.hero-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(65, 235, 176, 0.45), transparent);
+  animation: hero-scan 7s linear infinite;
+}
+
+.hero-mask {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 20% 0%, transparent 20%, oklch(16% .012 260 / 75%) 100%);
+}
+
+@keyframes hero-grid-drift {
+  0% { background-position: 0px 0px, 0px 0px; }
+  100% { background-position: 0px 40px, 40px 0px; }
+}
+@keyframes hero-glow-float {
+  0%, 100% { opacity: 0.5; transform: translate(0, 0) scale(1); }
+  50% { opacity: 0.85; transform: translate(30px, 24px) scale(1.18); }
+}
+@keyframes hero-fall {
+  0% { opacity: 0; transform: translateY(-20%); }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(560%); }
+}
+@keyframes hero-scan {
+  0% { opacity: 0; top: -5%; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { opacity: 0; top: 105%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-grid, .hero-glow, .hero-fall-item, .hero-scan {
+    animation: none !important;
+  }
+}
+.intro h1 { position: relative; margin: 0 0 0.75rem; font-size: 2.25rem; }
+.intro-desc { position: relative; font-size: 0.9375rem; color: var(--text-muted); max-width: 90%; }
 .intro p { font-size: 1.1rem; color: var(--text-muted); max-width: 90%; }
 
 
@@ -266,7 +356,9 @@ p, li { color: var(--text-muted); }
 
 /* Article */
 .article { padding-top: 0; min-width: 0; }
-.article-header { margin-bottom: 2rem; }
+.article-header { position: relative; overflow: hidden; margin-bottom: 2rem; padding-bottom: 0.5rem; }
+.about-hero { position: relative; overflow: hidden; }
+.about-hero .article-header { overflow: visible; }
 .article-header .post-date { margin: 0 0 0.75rem; }
 .article-header h1 { margin: 0 0 0.75rem; font-size: 1.875rem; }
 .article-header .post-meta { margin: 0; }

@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+import NeuralBackground from '../../components/NeuralBackground.astro';
 import { getMinutes } from '../../utils/reading-time';
 
 export async function getStaticPaths() {
@@ -26,6 +27,7 @@ const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
   <div class={hasToc ? 'post-wrap has-toc' : 'post-wrap'}>
     <article class="article">
       <header class="article-header">
+        <NeuralBackground id="article-canvas" />
         <p class="post-date">{dateStr} &middot; {minutes} min read</p>
         <h1>{post.data.title}</h1>
         <div class="post-meta">
