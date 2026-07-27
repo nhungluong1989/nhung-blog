@@ -75,7 +75,16 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     const filterButtons = Array.from(
       document.querySelectorAll<HTMLButtonElement>('.tag-filter'),
     );
-    let activeFilter = 'all';
+    const allButton = filterButtons.find((b) => b.dataset.filter === 'all');
+    const tagButtons = filterButtons.filter((b) => b.dataset.filter !== 'all');
+    const activeFilters = new Set<string>();
+
+    function syncButtonStates() {
+      allButton?.classList.toggle('active', activeFilters.size === 0);
+      tagButtons.forEach((b) => {
+        b.classList.toggle('active', activeFilters.has(b.dataset.filter ?? ''));
+      });
+    }
 
     function applyFilters() {
       const query = input.value.trim().toLowerCase();
@@ -83,7 +92,8 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
       for (const card of cards) {
         const matchesQuery = !query || (card.dataset.search ?? '').includes(query);
         const cardTags = (card.dataset.tags ?? '').split(' ');
-        const matchesFilter = activeFilter === 'all' || cardTags.includes(activeFilter);
+        const matchesFilter =
+          activeFilters.size === 0 || cardTags.some((t) => activeFilters.has(t));
         const visible = matchesQuery && matchesFilter;
         card.hidden = !visible;
         if (visible) visibleCount++;
@@ -92,10 +102,20 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     }
 
     input?.addEventListener('input', applyFilters);
-    filterButtons.forEach((btn) => {
+    allButton?.addEventListener('click', () => {
+      activeFilters.clear();
+      syncButtonStates();
+      applyFilters();
+    });
+    tagButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
-        activeFilter = btn.dataset.filter ?? 'all';
-        filterButtons.forEach((b) => b.classList.toggle('active', b === btn));
+        const filter = btn.dataset.filter ?? '';
+        if (activeFilters.has(filter)) {
+          activeFilters.delete(filter);
+        } else {
+          activeFilters.add(filter);
+        }
+        syncButtonStates();
         applyFilters();
       });
     });
