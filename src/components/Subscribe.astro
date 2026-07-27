@@ -1,0 +1,25 @@
+---
+const BUTTONDOWN_USERNAME = 'luong';
+---
+<section class="subscribe-box">
+  <p class="subscribe-kicker">SUBSCRIBE --NEW-POSTS</p>
+  <h2 class="subscribe-title">Get new posts by email</h2>
+  <p class="subscribe-desc">One email per post on data engineering and AI engineering. No digests, no marketing.</p>
+  <form
+    class="subscribe-form"
+    action={`https://buttondown.com/api/emails/embed-subscribe/${BUTTONDOWN_USERNAME}`}
+    method="post"
+    target="popupwindow"
+    onsubmit={`window.open('https://buttondown.com/${BUTTONDOWN_USERNAME}', 'popupwindow')`}
+  >
+    <input
+      type="email"
+      name="email"
+      required
+      placeholder="you@domain.dev"
+      class="subscribe-input"
+      aria-label="Email address"
+    />
+    <button type="submit" class="subscribe-btn">subscribe</button>
+  </form>
+</section>

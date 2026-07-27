@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import NeuralBackground from '../components/NeuralBackground.astro';
+import Subscribe from '../components/Subscribe.astro';
 import { getMinutes } from '../utils/reading-time';
 
 const posts = (await getCollection('blog')).sort(
@@ -66,6 +67,8 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     ))}
   </div>
   <p class="no-results" id="no-results" hidden>No posts match your search.</p>
+
+  <Subscribe />
 
   <script>
     const input = document.getElementById('search-input') as HTMLInputElement;

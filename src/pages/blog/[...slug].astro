@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import NeuralBackground from '../../components/NeuralBackground.astro';
+import Subscribe from '../../components/Subscribe.astro';
 import { getMinutes } from '../../utils/reading-time';
 
 export async function getStaticPaths() {
@@ -38,7 +39,8 @@ const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
       <div class="article-body">
         <Content />
       </div>
-      <p style="margin-top:2.5rem;"><a href="/">&larr; Back to all posts</a></p>
+      <Subscribe />
+      <p style="margin-top:1.5rem;"><a href="/">&larr; Back to all posts</a></p>
     </article>
     {hasToc && (
       <aside class="toc-sidebar">

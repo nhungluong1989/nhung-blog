@@ -127,6 +127,62 @@ p, li { color: var(--text-muted); }
 
 .divider { border: none; border-top: 0.5px solid var(--border); margin: 1.4rem 0; }
 
+/* Subscribe box */
+.subscribe-box {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+.subscribe-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+.subscribe-title { margin: 0.6rem 0 0; font-size: 1.1rem; }
+.subscribe-desc { margin: 0.3rem 0 0; font-size: 0.9rem; color: var(--text-dim); }
+.subscribe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.subscribe-input {
+  flex: 1;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+}
+.subscribe-input::placeholder { color: var(--text-faint); }
+.subscribe-input:focus { outline: none; border-color: var(--accent); }
+.subscribe-btn {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.subscribe-btn:hover { opacity: 0.9; }
+
+@media (min-width: 600px) {
+  .subscribe-form { flex-direction: row; }
+}
+
 /* Table of contents */
 .toc {
   background: var(--bg-card);
