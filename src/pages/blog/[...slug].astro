@@ -24,7 +24,7 @@ const dateStr = post.data.pubDate.toLocaleDateString('en-US', {
 });
 const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
 ---
-<BaseLayout title={post.data.title} description={post.data.description} ogType="article" wide={hasToc}>
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article" wide offset={hasToc}>
   <div class={hasToc ? 'post-wrap has-toc' : 'post-wrap'}>
     <article class="article">
       <header class="article-header">

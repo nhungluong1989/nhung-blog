@@ -18,6 +18,8 @@ const dateStr = pubDate.toLocaleDateString('en-US', {
   class="post-card"
   data-search={`${title} ${description} ${tags.join(' ')}`.toLowerCase()}
   data-tags={tags.map((t) => t.replace(/\s+/g, '-')).join(' ')}
+  data-title={title.toLowerCase()}
+  data-pubdate={pubDate.valueOf()}
 >
   <p class="post-date">{dateStr} &middot; {minutes} min read</p>
   <h2><a href={`/blog/${slug}`} class="post-title-link">{title}</a></h2>

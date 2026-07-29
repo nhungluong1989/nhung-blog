@@ -21,6 +21,7 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
 <BaseLayout
   title="Nhung Luong — Data & AI Engineering"
   description="Notes on data engineering, AI engineering, and building data products — pipelines, models, and the messy bits in between."
+  wide
 >
   <section class="intro">
     <NeuralBackground id="intro-canvas" />
@@ -32,24 +33,59 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     </p>
   </section>
 
-  <div class="search-row">
-    <input
-      type="search"
-      id="search-input"
-      class="search-box"
-      placeholder="Search posts…"
-      aria-label="Search posts"
-    />
-  </div>
-
-  <div class="filter-row" id="filter-row">
-    <span class="filter-label">FILTER:</span>
-    <button type="button" class="tag tag-filter active" data-filter="all">#all ({posts.length})</button>
-    {tags.map(([tag, count]) => (
-      <button type="button" class="tag tag-filter" data-filter={tag.replace(/\s+/g, '-')}>
-        #{tag.replace(/\s+/g, '-')} ({count})
+  <div class="controls-row">
+    <div class="filter-dropdown" id="filter-dropdown">
+      <button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false">
+        <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+          <path d="M1 2h14l-5.5 6.5V13l-3 1.5V8.5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+        </svg>
+        Filters
+        <span class="filter-count" id="filter-count" hidden>0</span>
+        <svg class="chevron" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
       </button>
-    ))}
+      <div class="filter-panel" id="filter-panel" hidden>
+        <div class="filter-panel-header">
+          <span>Filter by tag</span>
+          <button type="button" class="filter-clear" id="filter-clear">Clear</button>
+        </div>
+        <div class="filter-tags">
+          {tags.map(([tag, count]) => (
+            <label class="filter-tag-option">
+              <input type="checkbox" class="filter-checkbox" value={tag.replace(/\s+/g, '-')} />
+              <span>#{tag.replace(/\s+/g, '-')}</span>
+              <span class="filter-tag-count">{count}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="search-box-wrap">
+      <input
+        type="search"
+        id="search-input"
+        class="search-box"
+        placeholder="Search posts…"
+        aria-label="Search posts"
+      />
+    </div>
+
+    <div class="sort-dropdown" id="sort-dropdown">
+      <button type="button" class="sort-toggle" id="sort-toggle" aria-expanded="false">
+        <span id="sort-label">Newest first</span>
+        <svg class="chevron" viewBox="0 0 10 6" width="10" height="6" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <div class="sort-panel" id="sort-panel" hidden>
+        <button type="button" class="sort-option" data-sort="title-asc">Name A-Z</button>
+        <button type="button" class="sort-option" data-sort="title-desc">Name Z-A</button>
+        <button type="button" class="sort-option active" data-sort="newest">Newest first</button>
+        <button type="button" class="sort-option" data-sort="oldest">Oldest first</button>
+      </div>
+    </div>
   </div>
 
   <hr class="divider" />
@@ -75,20 +111,110 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     const list = document.getElementById('post-list');
     const noResults = document.getElementById('no-results');
     const cards = Array.from(list?.querySelectorAll<HTMLElement>('.post-card') ?? []);
-    const filterButtons = Array.from(
-      document.querySelectorAll<HTMLButtonElement>('.tag-filter'),
-    );
-    const allButton = filterButtons.find((b) => b.dataset.filter === 'all');
-    const tagButtons = filterButtons.filter((b) => b.dataset.filter !== 'all');
     const activeFilters = new Set<string>();
 
-    function syncButtonStates() {
-      allButton?.classList.toggle('active', activeFilters.size === 0);
-      tagButtons.forEach((b) => {
-        b.classList.toggle('active', activeFilters.has(b.dataset.filter ?? ''));
+    // --- Filters dropdown ---
+    const filterDropdown = document.getElementById('filter-dropdown');
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterPanel = document.getElementById('filter-panel');
+    const filterClear = document.getElementById('filter-clear');
+    const filterCount = document.getElementById('filter-count');
+    const filterCheckboxes = Array.from(
+      document.querySelectorAll<HTMLInputElement>('.filter-checkbox'),
+    );
+
+    function closeFilterPanel() {
+      filterPanel?.setAttribute('hidden', '');
+      filterToggle?.setAttribute('aria-expanded', 'false');
+    }
+    function toggleFilterPanel() {
+      const isOpen = !filterPanel?.hasAttribute('hidden');
+      if (isOpen) {
+        closeFilterPanel();
+      } else {
+        closeSortPanel();
+        filterPanel?.removeAttribute('hidden');
+        filterToggle?.setAttribute('aria-expanded', 'true');
+      }
+    }
+    filterToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFilterPanel();
+    });
+    filterClear?.addEventListener('click', () => {
+      activeFilters.clear();
+      filterCheckboxes.forEach((cb) => (cb.checked = false));
+      syncFilterCount();
+      applyFilters();
+    });
+    filterCheckboxes.forEach((cb) => {
+      cb.addEventListener('change', () => {
+        if (cb.checked) {
+          activeFilters.add(cb.value);
+        } else {
+          activeFilters.delete(cb.value);
+        }
+        syncFilterCount();
+        applyFilters();
       });
+    });
+    function syncFilterCount() {
+      if (!filterCount) return;
+      filterCount.textContent = String(activeFilters.size);
+      filterCount.hidden = activeFilters.size === 0;
+      filterToggle?.classList.toggle('has-active', activeFilters.size > 0);
     }
 
+    // --- Sort dropdown ---
+    const sortDropdown = document.getElementById('sort-dropdown');
+    const sortToggle = document.getElementById('sort-toggle');
+    const sortPanel = document.getElementById('sort-panel');
+    const sortLabel = document.getElementById('sort-label');
+    const sortOptions = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('.sort-option'),
+    );
+    let activeSort = 'newest';
+
+    function closeSortPanel() {
+      sortPanel?.setAttribute('hidden', '');
+      sortToggle?.setAttribute('aria-expanded', 'false');
+    }
+    function toggleSortPanel() {
+      const isOpen = !sortPanel?.hasAttribute('hidden');
+      if (isOpen) {
+        closeSortPanel();
+      } else {
+        closeFilterPanel();
+        sortPanel?.removeAttribute('hidden');
+        sortToggle?.setAttribute('aria-expanded', 'true');
+      }
+    }
+    sortToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSortPanel();
+    });
+    sortOptions.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeSort = btn.dataset.sort ?? 'newest';
+        if (sortLabel) sortLabel.textContent = btn.textContent ?? '';
+        sortOptions.forEach((b) => b.classList.toggle('active', b === btn));
+        closeSortPanel();
+        applySort();
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (filterDropdown && !filterDropdown.contains(e.target as Node)) closeFilterPanel();
+      if (sortDropdown && !sortDropdown.contains(e.target as Node)) closeSortPanel();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeFilterPanel();
+        closeSortPanel();
+      }
+    });
+
+    // --- Search + filter + sort ---
     function applyFilters() {
       const query = input.value.trim().toLowerCase();
       let visibleCount = 0;
@@ -104,23 +230,23 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
       if (noResults) noResults.hidden = visibleCount !== 0;
     }
 
-    input?.addEventListener('input', applyFilters);
-    allButton?.addEventListener('click', () => {
-      activeFilters.clear();
-      syncButtonStates();
-      applyFilters();
-    });
-    tagButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const filter = btn.dataset.filter ?? '';
-        if (activeFilters.has(filter)) {
-          activeFilters.delete(filter);
-        } else {
-          activeFilters.add(filter);
+    function applySort() {
+      const sorted = [...cards].sort((a, b) => {
+        switch (activeSort) {
+          case 'title-asc':
+            return (a.dataset.title ?? '').localeCompare(b.dataset.title ?? '');
+          case 'title-desc':
+            return (b.dataset.title ?? '').localeCompare(a.dataset.title ?? '');
+          case 'oldest':
+            return Number(a.dataset.pubdate) - Number(b.dataset.pubdate);
+          case 'newest':
+          default:
+            return Number(b.dataset.pubdate) - Number(a.dataset.pubdate);
         }
-        syncButtonStates();
-        applyFilters();
       });
-    });
+      sorted.forEach((card) => list?.appendChild(card));
+    }
+
+    input?.addEventListener('input', applyFilters);
   </script>
 </BaseLayout>

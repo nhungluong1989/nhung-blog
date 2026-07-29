@@ -8,8 +8,9 @@ interface Props {
   description: string;
   ogType?: string;
   wide?: boolean;
+  offset?: boolean;
 }
-const { title, description, ogType, wide = false } = Astro.props;
+const { title, description, ogType, wide = false, offset = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -17,11 +18,11 @@ const { title, description, ogType, wide = false } = Astro.props;
     <BaseHead title={title} description={description} ogType={ogType} />
   </head>
   <body>
-    <Header wide={wide} />
+    <Header wide={wide} offset={offset} />
     <main class={wide ? 'wrap wrap-wide' : 'wrap'}>
       <slot />
     </main>
-    <Footer wide={wide} />
+    <Footer wide={wide} offset={offset} />
 
     <script>
       import mermaid from 'mermaid';
