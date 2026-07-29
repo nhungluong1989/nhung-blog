@@ -13,6 +13,16 @@ const dateStr = pubDate.toLocaleDateString('en-US', {
   month: 'short',
   day: 'numeric',
 });
+
+const TAG_META: Record<string, { hue: number; icon: string }> = {
+  'ai engineering': { hue: 165, icon: 'spark' },
+  'data engineering': { hue: 230, icon: 'pipeline' },
+  banking: { hue: 80, icon: 'bank' },
+  'data modeling': { hue: 300, icon: 'schema' },
+  'reading notes': { hue: 30, icon: 'book' },
+};
+const primaryTag = tags[0] ?? '';
+const meta = TAG_META[primaryTag] ?? { hue: 165, icon: 'spark' };
 ---
 <div
   class="post-card"
@@ -21,7 +31,45 @@ const dateStr = pubDate.toLocaleDateString('en-US', {
   data-title={title.toLowerCase()}
   data-pubdate={pubDate.valueOf()}
 >
-  <p class="post-date">{dateStr} &middot; {minutes} min read</p>
+  <div class="card-top">
+    <span class="card-icon" style={`--tag-hue:${meta.hue}`}>
+      {meta.icon === 'spark' && (
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <path d="M8 1l1.5 4.5L14 7l-4.5 1.5L8 13l-1.5-4.5L2 7l4.5-1.5z" fill="currentColor" />
+        </svg>
+      )}
+      {meta.icon === 'pipeline' && (
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <circle cx="3" cy="4" r="1.6" fill="none" stroke="currentColor" stroke-width="1.3" />
+          <circle cx="13" cy="4" r="1.6" fill="none" stroke="currentColor" stroke-width="1.3" />
+          <circle cx="8" cy="12" r="1.6" fill="none" stroke="currentColor" stroke-width="1.3" />
+          <path d="M4.4 5.2L7 10.5M11.6 5.2L9 10.5" stroke="currentColor" stroke-width="1.3" fill="none" />
+        </svg>
+      )}
+      {meta.icon === 'bank' && (
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <path d="M8 1.5l6.5 3.5H1.5z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
+          <path d="M2.5 6v6.5M5.5 6v6.5M8 6v6.5M10.5 6v6.5M13.5 6v6.5" stroke="currentColor" stroke-width="1.2" />
+          <path d="M1.5 13.5h13" stroke="currentColor" stroke-width="1.2" />
+        </svg>
+      )}
+      {meta.icon === 'schema' && (
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <rect x="1.5" y="1.5" width="5" height="4" rx="0.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+          <rect x="9.5" y="1.5" width="5" height="4" rx="0.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+          <rect x="5.5" y="10" width="5" height="4" rx="0.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+          <path d="M4 5.5v2.5h8V5.5M8 8v2" fill="none" stroke="currentColor" stroke-width="1.2" />
+        </svg>
+      )}
+      {meta.icon === 'book' && (
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <path d="M2 2.5c1.8-.7 3.6-.7 5.5 0v10c-1.9-.7-3.7-.7-5.5 0z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
+          <path d="M14 2.5c-1.8-.7-3.6-.7-5.5 0v10c1.9-.7 3.7-.7 5.5 0z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
+        </svg>
+      )}
+    </span>
+    <p class="post-date">{dateStr} &middot; {minutes} min read</p>
+  </div>
   <h2><a href={`/blog/${slug}`} class="post-title-link">{title}</a></h2>
   <p class="excerpt">{description}</p>
   <div class="post-meta">

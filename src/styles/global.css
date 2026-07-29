@@ -308,6 +308,19 @@ p, li { color: var(--text-muted); }
   box-shadow: 0 12px 28px -16px rgba(0, 0, 0, 0.55);
 }
 .post-card[hidden] { display: none; }
+.card-top { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.5rem; }
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: oklch(84% 0.16 var(--tag-hue) / 14%);
+  color: oklch(84% 0.16 var(--tag-hue));
+}
+.card-top .post-date { margin: 0; }
 .post-date {
   margin: 0 0 0.4rem;
   font-family: var(--font-mono);
